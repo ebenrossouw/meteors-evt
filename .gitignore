@@ -1,0 +1,25 @@
+# Project
+resources/
+**/*.pdf
+.env
+
+# Python
+**/__pycache__
+
+# R
+.Rproj
+.Rproj.user
+.Rhistory
+.Rapp.history
+.RData
+.RDataTmp
+.Ruserdata
+*-Ex.R
+/*.Rcheck/
+.Renviron
+
+# R markdown
+*_cache/
+/cache/
+*.utf8.md
+*.knit.md
