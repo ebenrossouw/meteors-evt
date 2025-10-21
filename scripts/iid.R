@@ -37,7 +37,6 @@ g = hill2$gamma[k]
 b = hill2$b[k]
 beta = hill2$beta[k]
 
-
 # abias = b[k] * sum((1:k / (k+1)) ^ beta[k]) / k
 abias = b / (1 + beta)
 avar = h^2 / k
@@ -88,33 +87,47 @@ ParetoQQ_der(x)
 abline(h=h, lwd=1.5, col="blue")
 
 
-# Small Exceedences
-
+# Small Exceedences & Return Periods
 q = 400:1000
 m = length(q)
 p = numeric(m)
+l = numeric(m)
+u = numeric(m)
 
 for (i in 1:m) {
     weissman = Prob(x, hill$gamma, q[i])
     p[i] = weissman$P[k]
+    
+    d = z * (k * (1 + h ^ -2 * (log(q[i] / x[n-k])) ^ 2)) ^ -0.5
+    l[i] = p[i] / (1 + d)
+    u[i] = p[i] / (1 - d)
 }
 
 {
     plot(q, p, type="l", yaxt="n")
     axis(2, las=2)
     
+    lines(q, l, lty="dashed")
+    lines(q, u, lty="dashed")
+    
     j = which(q == 441)
     abline(v=q[j], h=p[j], lty=2, col="gray")
 }
 
-i = c(400, 441, 500, 600, 700, 800, 900, 1000) - 400 + 1
-cbind(q[i], p[i])
+{
+    plot(q, 1/p, type="l")
+    lines(q, 1/u, lty="dashed")
+    lines(q, 1/l, lty="dashed")
+    
+    j = which(q == 441)
+    abline(v=q[j], h=1/p[j], lty=2, col="gray")
+}
 
+i = c(42, 0:6 * 100 + 1)
+cbind(q[i], p[i], l[i], u[i], 1/p[i], 1/u[i], 1/l[i])
 
 # ppareto(q[i], 1/g, lower.tail=FALSE) # TODO
 
-
-# Return Periods
 
 
 
